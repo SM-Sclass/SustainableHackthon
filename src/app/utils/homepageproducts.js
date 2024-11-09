@@ -18,7 +18,7 @@ export const product =[
         "title": "No Nasties",
         "category": "clothes",
         "webUrl": "https://www.nonasties.in/",
-        "imagepath": "https://www.thenaturalvillage.com/wp-content/uploads/2018/08/NO-NASTIES-LOGO-TAGLINE-500x500.png"
+        "imagepath": "/BrandDisplay/NoNasties.png"
     },
     {
         "id": 4,
