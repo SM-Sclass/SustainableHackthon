@@ -87,4 +87,33 @@ export const suggestionBrand = [
             }
         ],
     }
+    ,
+    {
+        "id": 4,
+        "categoryImg": "/category/BabyProducts.png",
+        "categoryName": "Baby Products",
+        "categoryRoute": "/babyproducts",
+        "categoryBrands": [
+            {
+                "id":"BP1",
+                "image": "/BrandDisplay/BabyJalebi.png", 
+                "brandName": "Baby Jalebi"
+            },
+            {
+                "id":"BP2",
+                "image": "/BrandDisplay/nestry.png",
+                "brandName": "The Nestry"
+            },
+            {
+                "id":"BP3",
+                "image": "/BrandDisplay/Shumee.jpg",
+                "brandName": "Shumee"
+            },
+            {
+                "id":"BP4",
+                "image": "/BrandDisplay/toddlerthing.jpeg",
+                "brandName": "Toddler Thing"
+            }
+        ]
+    }
 ]

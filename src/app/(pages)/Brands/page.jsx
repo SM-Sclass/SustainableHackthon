@@ -9,7 +9,7 @@ function page() {
     <>
     <div className="h-32 bg-white">
     </div>
-    <div className="m-2 flex flex-col justify-center items-center">
+    <div className="m-2 my-5 pb-3 flex flex-col justify-center items-center">
         <h1 className="text-neutral-800">Sustainable Brands</h1>
         {suggestionBrand.map(category => (
         <CategoryDisplay key={category.id} {...category}/>))}

@@ -5,7 +5,7 @@ import Link from "next/link";
 function CategoryDisplay(category) {
     const {categoryImg, categoryBrands, categoryName, categoryRoute} = category;
   return (
-    <div className="w-9/12 bg-white h-40 rounded-lg mt-5 shadow hover:shadow-lg transition-shadow duration-200">
+    <div className="w-9/12 bg-white h-40 rounded-lg mt-5 shadow hover:shadow-lg transition-shadow duration-200 relative group">
         <Link className="" href={categoryRoute}>
         <div className="flex items-center justify-center p-3">  
             <div className="bg-white px-2 h-min">
@@ -18,7 +18,9 @@ function CategoryDisplay(category) {
             </div>
         </div>
         </Link>
-        
+        <div className='absolute right-4 top-1/2 transform -translate-y-1/2 hidden group-hover:inline transition-opacity duration-300 opacity-0 group-hover:opacity-100'>
+            <Image src='SVGs/right-arrow-svgrepo-com.svg' alt="Rghtaroow" width='20' height='20'/>
+        </div>
     </div>
   )
 }
