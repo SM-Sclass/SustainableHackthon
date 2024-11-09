@@ -14,12 +14,15 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
-        'custom-image': "url('/Sus2.jpg')",
+        'custom-image': "url('/sus4.png')",
       },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      height:{
+        '128':'32rem',
+      }
     },
     container:{
       center:true,
