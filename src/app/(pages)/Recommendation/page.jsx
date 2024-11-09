@@ -1,6 +1,35 @@
 import React from 'react'
 import Form from 'next/form'
 function page() {
+
+  const [inputValue, setInputValue] = useState('');
+  const [response, setResponse] = useState(null);
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://127.0.0.1:5000/search', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: inputValue }),  // adjust key based on backend expectation
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setResponse(data);
+      } else {
+        console.error('Error in API response:', res.statusText);
+      }
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
   return (
     <>
       <div className='h-32 bg-white'></div>
