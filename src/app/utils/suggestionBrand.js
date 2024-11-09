@@ -59,6 +59,7 @@ export const suggestionBrand = [
     //     ],
     // }
     {
+<<<<<<< HEAD
         "id": 3,
         "categoryImg": "/category/SusCosmetics.png",
         "categoryName": "Cosmetics",
@@ -83,6 +84,32 @@ export const suggestionBrand = [
                 "id":"CS4",
                 "image": "/BrandDisplay/RawNature.png",
                 "brandName": "Raw Nature"
+=======
+        "id": 2,
+        "categoryImg": "/category/foood.jpg",
+        "categoryName": "Food",
+        "categoryRoute": "/Food",
+        "categoryBrands": [
+            {
+                "id":"FD1",
+                "image": "/BrandDisplay/Wakao.png",
+                "brandName": "Wakao"
+            },
+            {
+                "id":"FD2",
+                "image": "/BrandDisplay/OrganicAmrit.jpeg",
+                "brandName": "Organic Amrit"
+            },
+            {
+                "id":"FD3",
+                "image": "/BrandDisplay/TheGreenMeat.png",
+                "brandName": "The Green Meat"
+            },
+            {
+                "id":"FD4",
+                "image": "/BrandDisplay/ZeroCowFactory.png",
+                "brandName": "Zero Cow Factory"
+>>>>>>> b57f5bbfd03ae054b74eb9094b78a089d0688eb2
             }
         ],
     }

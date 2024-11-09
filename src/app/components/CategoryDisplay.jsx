@@ -5,7 +5,7 @@ import Link from "next/link";
 function CategoryDisplay(category) {
     const {categoryImg, categoryBrands, categoryName, categoryRoute} = category;
   return (
-    <div className="w-9/12 bg-white h-40 rounded-lg mt-5">
+    <div className="w-9/12 bg-white h-40 rounded-lg mt-5 shadow hover:shadow-lg transition-shadow duration-200">
         <Link className="" href={categoryRoute}>
         <div className="flex items-center justify-center p-3">  
             <div className="bg-white px-2 h-min">
