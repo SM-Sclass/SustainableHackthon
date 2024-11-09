@@ -1,27 +1,61 @@
+
 export const suggestionBrand = [
     {
         "id": 1,
-        "categoryImg": "https://img.freepik.com/premium-vector/cotton-100-organic-icon-bio-eco-natural-product-certificate-logo-vector-cotton-flower-stamp_186921-344.jpg",
+        "categoryImg": "/category/Suscloth.png",
         "categoryName": "Clothing",
         "categoryRoute": "/clothing",
         "categoryBrands": [
             {
-                "image": "/images/brand1.jpg",
-                "brandName": "Brand1"
+                "id":"CL1",
+                "image": "/BrandDisplay/NoNasties.png",
+                "brandName": "No Nasties"
             },
             {
-                "image": "/images/brand2.jpg",
-                "brandName": "Brand2"
+                "id":"CL2",
+                "image": "/BrandDisplay/TerraTribe.png",
+                "brandName": "The Terra Tribe"
             },
             {
-                "image": "/images/brand3.jpg",
-                "brandName": "Brand3"
+                "id":"CL3",
+                "image": "/BrandDisplay/BigStory.jpeg",
+                "brandName": "A Big Indian Story"
             },
             {
-                "image": "/images/brand4.jpg",
-                "brandName": "Brand4"
+                "id":"CL4",
+                "image": "/BrandDisplay/theSummerhouse.png",
+                "brandName": "The Summer House"
             }
         ],
 
+    },
+    {
+        "id": 2,
+        "categoryImg": "/category/Suscloth.png",
+        "categoryName": "Food",
+        "categoryRoute": "/clothing",
+        "categoryBrands": [
+            {
+                "id":"FD1",
+                "image": "/BrandDisplay/NoNasties.png",
+                "brandName": "No Nasties"
+            },
+            {
+                "id":"FD2",
+                "image": "/BrandDisplay/TerraTribe.png",
+                "brandName": "The Terra Tribe"
+            },
+            {
+                "id":"FD3",
+                "image": "/BrandDisplay/BigStory.jpeg",
+                "brandName": "A Big Indian Story"
+            },
+            {
+                "id":"FD4",
+                "image": "/BrandDisplay/theSummerhouse.png",
+                "brandName": "The Summer House"
+            }
+        ],
     }
+
 ]
