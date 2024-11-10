@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react'
 import Form from 'next/form'
+import HistoryFoodRecommendation from '@/app/components/HistoryFoodRecommendation';
 function page() {
 
   const [search, setSearch] = useState('');
@@ -73,6 +74,7 @@ function page() {
         </Form>
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       </div>
+      <HistoryFoodRecommendation/>
     </>
 
 

@@ -9,9 +9,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import json
 from bs4 import BeautifulSoup
+from flask_cors import CORS 
 
 # Initialize Flask App
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:3000"])
 
 # Initialize the OpenFoodFacts API
 api = openfoodfacts.API(user_agent="MyAwesomeApp/1.0")

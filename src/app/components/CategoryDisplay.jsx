@@ -28,7 +28,7 @@ function CategoryDisplay(category) {
 const CategoryDisplayCard= (brand)=>{
     const {image, brandName} = brand;
     return (
-        <div className="flex flex-col items-center justify-center rounded-lg bg-">
+        <div className="flex flex-col items-center justify-center rounded-lg bg-white">
             <div className="h-28 flex justify-center items-center">
             <Image src={image} alt={brandName} width="100" height="100"></Image>
             </div>
