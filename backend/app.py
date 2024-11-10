@@ -5,7 +5,12 @@ import pandas as pd
 from flask_cors import CORS
 from search import search_product
 from product import product_rating
+<<<<<<< HEAD
 from env_endpoint import recommend_refrigerator_freezer, recommend_air_conditioner
+=======
+from cosmetics_prod import scrape_cosdna,search_amazon
+
+>>>>>>> 04ec7f723e0e2cd97b3bd66ae2da4c290f106b69
 # Initialize Flask App
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])
@@ -174,6 +179,39 @@ def search():
     except Exception as e:
         # Handle any errors in processing
         return jsonify({"error": "An error occurred during search processing", "details": str(e)}), 500
+
+
+
+
+
+@app.route("/cosmetic", methods=["POST"])
+def analyze_product():
+    try:
+        # Check if JSON data is present in the request
+        if not request.is_json:
+            return jsonify({"error": "Request must be in JSON format"}), 400
+        
+        data = request.get_json()
+        product_name = data.get("product_name")
+
+        # Handle case where product_name is missing or empty
+        if not product_name:
+            return jsonify({"error": "Product name is required"}), 400
+
+        # Run CosDNA scrape and check for harmful ingredients
+        product_data = scrape_cosdna(product_name)
+        if product_data:
+            # Run Amazon search and include results if successful
+            suggested_products = search_amazon(product_data["suggested_search_phrase"])
+            product_data["suggested_products"] = suggested_products if suggested_products else []
+            return jsonify(product_data), 200
+        else:
+            return jsonify({"error": "No harmful ingredients found or product not listed on CosDNA"}), 404
+
+    except Exception as e:
+        # Catch unexpected errors
+        print(f"An error occurred: {e}")
+        return jsonify({"error": "An unexpected error occurred"}), 500
 
 
 
