@@ -9,7 +9,6 @@ function Navbar({ className }) {
   const [active, setActive] = useState(null);
   const [user, setUser] = useState(null);
 
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -42,6 +41,9 @@ function Navbar({ className }) {
         </Link>
         <Link href={"/Brands"}>
           <MenuItem setActive={setActive} active={active} item="Brands" />
+        </Link>
+        <Link href={"/Carbon-Emission"}>
+          <MenuItem setActive={setActive} active={active} item="Carbon Emission" />
         </Link>
         {user ? (
           <button onClick={handleSignOut} className="text-blue-500">

@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 import time
 import json
@@ -24,14 +25,14 @@ def initialize_driver():
 def get_searchable_phrase(product_name, ingredients):
     # Craft a strict prompt for reasons, rating, and search phrase
     prompt = (
-        f"Analyze the harmful ingredients ({', '.join(ingredients)}) in {product_name}. "
-        f"Provide a collective reason explaining why these ingredients are harmful with a short paragraph, focusing on their general impact on health and safety. "
+        f"I am working on Environmental Sustainability project. Analyze the harmful ingredients ({', '.join(ingredients)}) in {product_name}. "
+        f"Provide a collective reason explaining why these ingredients are harmful with a short paragraph with no formatting, focusing on their general impact on health and safety. "
         f"In a new line, give a rating out of 10 without explanation for the product, based on both the severity and quantity of harmful ingredients. "
         f"Then, generate a short, precise, and generalized search-friendly phrase for safe and sustainable alternatives to this product, avoiding major harmful ingredients. "
         f"If harmful ingredients include terms like talc or sulfate, include keywords such as 'sulfate-free' or 'talc-free' in the output phrase. "
         f"The phrase should focus on natural, organic, eco-friendly, non-toxic, and sustainable ingredients, without using the specific product name. "
         f"Also mention the product category (e.g., soap, shampoo). "
-        f"Ensure the output is in the following strict format:\n"
+        f"Ensure the output is in the following STRICT FORMAT:\n"
         f"Product Name: {product_name}\n"
         f"Ingredients: {', '.join(ingredients)}\n"
         f"Reason for Harm: {{ Reason goes here }}\n"
@@ -114,61 +115,62 @@ def scrape_cosdna(product_name):
     finally:
         driver.quit()
 
-# Function to search for products on Amazon without scraping ingredients
 def search_amazon(search_phrase):
     driver = initialize_driver()
     suggested_products = []
     try:
-        driver.get("https://www.amazon.in/")
-        
-        # Wait for the search box to be present
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "twotabsearchtextbox")))
-        
-        # Enter search phrase in Amazon's search bar and submit
-        search_field = driver.find_element(By.ID, "twotabsearchtextbox")
-        search_field.send_keys(search_phrase)
-        driver.find_element(By.ID, "nav-search-submit-button").click()
-        
-        # Wait for the page to load and results to appear
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.s-main-slot")))
-        time.sleep(2)  # Allow additional time for loading
-        
-        # Scrape the top 5 products
+        # Construct the search URL directly with the search phrase
+        formatted_phrase = search_phrase.replace(" ", "+")
+        url = f"https://www.amazon.in/s?k={formatted_phrase}"
+        driver.get(url)
+
+        # Wait for the results to load
+        try:
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.s-main-slot")))
+            time.sleep(2)  # Extra wait for dynamic content
+        except TimeoutException:
+            # print("Amazon search results did not load in time.")
+            return suggested_products
+
+        # Parse the loaded HTML and get the top results
         page_html = driver.page_source
         soup = BeautifulSoup(page_html, "html.parser")
         products = soup.select("div.s-main-slot div[data-component-type='s-search-result']")[:5]
-        
+
         for product in products:
             try:
-                name = product.find("span", class_="a-size-base-plus a-color-base a-text-normal").get_text(strip=True)
-                price_symbol = product.find("span", class_="a-price-symbol").get_text(strip=True)
-                price_whole = product.find("span", class_="a-price-whole").get_text(strip=True)
-                price = f"{price_symbol}{price_whole}"
-                link = "https://www.amazon.in" + product.find("a", class_="a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")["href"]
-                
-                # Extract image link
-                image_tag = product.find("img")
-                image_url = image_tag["src"] if image_tag else ""
+                # Extracting product details
+                name = product.find("span", class_="a-size-base-plus a-color-base a-text-normal")
+                name = name.get_text(strip=True) if name else "Name not available"
 
-                # Add product details to suggested_products list
+                price_symbol = product.find("span", class_="a-price-symbol")
+                price_whole = product.find("span", class_="a-price-whole")
+                price = f"{price_symbol.get_text(strip=True)}{price_whole.get_text(strip=True)}" if price_symbol and price_whole else "Price not available"
+
+                link_tag = product.find("a", class_="a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")
+                link = "https://www.amazon.in" + link_tag["href"] if link_tag else "Link not available"
+
+                image_tag = product.find("img")
+                image_url = image_tag["src"] if image_tag else "Image not available"
+
+                # Add product details to the results list
                 suggested_products.append({
                     "product_name": name,
                     "price": price,
                     "link": link,
                     "image_url": image_url
                 })
-                
+
             except AttributeError:
+                # Skip any product that doesn’t have the expected structure
                 continue
-            
-    
+
     except Exception as e:
         print("An error occurred:", e)
     finally:
         driver.quit()
-    
-    return suggested_products
 
+    return suggested_products
 # # Main script execution
 # product_name = input("Enter the product name to search on CosDNA: ")
 # product_data = scrape_cosdna(product_name)
