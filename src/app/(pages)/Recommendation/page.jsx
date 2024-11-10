@@ -1,43 +1,16 @@
 "use client";
-import React, { useState, useEffect } from 'react'
-import HistoryFoodRecommendation from '@/app/components/HistoryFoodRecommendation';
-import HistoryFood from '@/app/components/HistoryFood';
-import SkincareCard from '@/app/components/SkincareCard';
-import { auth } from '@/app/utils/firebase';
+import React, { useState } from "react";
+import HistoryFoodRecommendation from "@/app/components/HistoryFoodRecommendation";
+import HistoryFood from "@/app/components/HistoryFood";
+import SkincareCard from "@/app/components/SkincareCard";
 
-function page() {
-
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('food-beverage');
-  const [response, setResponse] = useState([]);
-  const [error, setError] = useState('');
+function Page() {
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("cosmetic");
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState("");
   const [fetching, setFetching] = useState(false);
-  const [user, setUser] = useState(null);
-1
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user); // If user is authenticated, store user data
-      } else {
-        setUser(null); // If no user, set user state to null
-      }
-    });
-
-    return () => unsubscribe(); // Cleanup the listener on component unmount
-  }, []);
-
-
-
-
-
-function getFirstTwoWords(sentence) {
-  if (typeof sentence !== 'string' || sentence.trim() === '') {
-    return '';  // Return an empty string or a default value if the sentence is invalid
-  }
-  const words = sentence.split(" ");
-  return words.slice(0, 2).join(' ');
-}
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!search || !category) {
@@ -139,18 +112,9 @@ function getFirstTwoWords(sentence) {
             </div>
           </div>
         )}
-        {
-          response && category === "food-beverage" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {response.map((food) => (
-                <HistoryFood key={food._id} {...food} />
-              ))}
-            </div>
-          )
-        }
       </div>
 
-      {user && <HistoryFoodRecommendation />}
+      <HistoryFoodRecommendation />
     </>
   );
 }
