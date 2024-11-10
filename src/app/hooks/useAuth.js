@@ -1,6 +1,8 @@
 // src/useAuth.js
 import { useState, useEffect } from "react";
-import { auth, provider, signInWithPopup, signOut } from "../utils/firebase";
+import { signInWithPopup, signOut } from "firebase/auth";
+import { auth, provider } from "../utils/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 
 export const useAuth = () => {
@@ -16,14 +18,24 @@ export const useAuth = () => {
       const result = await signInWithPopup(auth, provider);
       const userData = result.user;
       setUser(userData);
-
+      console.log(userData);
       // Send user data to the backend
-      await axios.post("http://localhost:3000/users/addUser", {
-        uid: userData.uid,
-        displayName: userData.displayName,
-        email: userData.email,
-        photoURL: userData.photoURL,
-      });
+      await fetch("http://localhost:3000/api/addUser", {
+        method: "POST", // Set the method to POST
+        headers: {
+          "Content-Type": "application/json", // Set the content type to JSON
+        },
+        body: JSON.stringify({
+          uid: userData.uid,
+          displayName: userData.displayName,
+          email: userData.email,
+          photoURL: userData.photoURL,
+        }), // Convert the data to a JSON string
+      })
+        .then((response) => response.json()) // Parse the response as JSON
+        .then((data) => console.log("Success:", data)) // Handle success
+        .catch((error) => console.error("Error:", error)); 
+        
       setIsSigningIn(true);
     } catch (error) {
       if (error.code === "auth/cancelled-popup-request") {
@@ -48,7 +60,7 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth,(currentUser) => {
       setUser(currentUser);
     });
     return () => unsubscribe();

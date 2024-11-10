@@ -1,18 +1,25 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: process   .env.VITE_FIREBASE_API_KEY,
-  authDomain: 'mern-blog-b327f.firebaseapp.com',
-  projectId: 'mern-blog-b327f',
-  storageBucket: 'mern-blog-b327f.appspot.com',
-  messagingSenderId: '699397991367',
-  appId: '1:699397991367:web:88ff565ef72a182d6b87e2',
+  apiKey: "AIzaSyBldgW-4Ahhj7lKR99cePB9Y63cRjn4LPg",
+  authDomain: "sustainabilityproduct-6b6b6.firebaseapp.com",
+  projectId: "sustainabilityproduct-6b6b6",
+  storageBucket: "sustainabilityproduct-6b6b6.firebasestorage.app",
+  messagingSenderId: "776396003403",
+  appId: "1:776396003403:web:8cea79d82861003e0115ce",
+  measurementId: "G-V1B2RR9HXJ"
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();

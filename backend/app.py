@@ -5,12 +5,8 @@ import pandas as pd
 from flask_cors import CORS
 from search import search_product
 from product import product_rating
-<<<<<<< HEAD
-from env_endpoint import recommend_refrigerator_freezer, recommend_air_conditioner
-=======
 from cosmetics_prod import scrape_cosdna,search_amazon
-
->>>>>>> 04ec7f723e0e2cd97b3bd66ae2da4c290f106b69
+from env_endpoint import recommend_refrigerator_freezer, recommend_air_conditioner
 # Initialize Flask App
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])

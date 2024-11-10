@@ -6,6 +6,7 @@ export default async function connectDB() {
         console.log("Connection available to DB");
         return;
     }
+    console.log("Connecting to DB", process.env.MONGODB_URI, process.env.DB_NAME);
     try {
         mongoose.connect(process.env.MONGODB_URI, {
             dbName: process.env.DB_NAME,
