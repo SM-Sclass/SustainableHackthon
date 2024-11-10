@@ -27,8 +27,7 @@ function Navbar({ className }) {
                 
                 <MenuItem setActive={setActive} active={active} item="Settings" href="">
                     <div className="flex flex-col space-y-4 text-sm">
-                        <HoveredLink href="/Bookmark">Bookmark</HoveredLink>
-                        <HoveredLink href="/Logout">Logout</HoveredLink>
+                        <HoveredLink href="/authFirebase">Logout</HoveredLink>
                     </div>
                 </MenuItem>
             </Menu>
