@@ -24,14 +24,6 @@ function SkincareCard({ product_name, image_url, price, link, ingredients = [], 
       <a href={link} className="text-blue-600 text-sm mt-1 hover:underline">
         {price || "Price not available"}
       </a>
-      <p className={`${getBorderColor(rating)} text-sm mt-2`}>{reason || "No reason provided"}</p>
-      {rating && <p className={`text-sm mt-2 ${getBorderColor(rating)}`}>Rating: {rating}</p>}
-      <h4 className="font-semibold text-neutral-700 text-sm mt-3">Ingredients:</h4>
-      <ul className="text-sm text-neutral-700 list-disc pl-4 max-h-20 overflow-y-auto w-full">
-        {ingredients.length > 0
-          ? ingredients.map((ingredient, idx) => <li key={idx}>{ingredient}</li>)
-          : <li>No ingredients listed</li>}
-      </ul>
     </div>
   );
 }

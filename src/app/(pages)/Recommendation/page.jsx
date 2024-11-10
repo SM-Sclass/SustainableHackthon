@@ -98,20 +98,27 @@ function Page() {
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       </div>
 
-      <div className="m-2 p-4">
-        <h3 className="text-lg font-bold text-neutral-500 p-2">Search Results</h3>
-        {response && category === "cosmetic" && (
-          <div className="flex flex-col items-center justify-center">
-            <p className="text-neutral-600 my-2 p-2">{response.product_name || "No product name"}</p>
-            <p className="text-sm my-1 text-yellow-500">{response.reason || "No reason provided"}</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {response.suggested_products?.map((product) => (
-                <SkincareCard key={product.link} {...product} />
-              ))}
-            </div>
-          </div>
-        )}
+      <div className="m-4 p-5">
+  <h3 className="text-xl font-bold text-neutral-600 p-3">Search Results</h3>
+  {response && category === "cosmetic" && (
+    <div className="flex flex-col items-center justify-center">
+      <p className="text-neutral-700 text-lg my-3 p-2">{response.product_name || "No product name"}</p>
+      <p className="text-sm my-2 text-yellow-500">{response.reason || "No reason provided"}</p>
+      
+      {/* Rating formatted as rating/10 */}
+      <p className="text-lg my-2 font-semibold text-yellow-600">
+        Rating: {response.rating ? `${response.rating}/10` : "No rating provided"}
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-4">
+        {response.suggested_products?.map((product) => (
+          <SkincareCard key={product.link} {...product} />
+        ))}
       </div>
+    </div>
+  )}
+</div>
+
 
       <HistoryFoodRecommendation />
     </>
