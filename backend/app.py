@@ -9,6 +9,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import json
 from bs4 import BeautifulSoup
+from search import search_product
 from product import product_rating
 
 # Initialize Flask App
@@ -194,6 +195,35 @@ def product():
         # Handle any errors in processing
         return jsonify({"error": "An error occurred during search processing", "details": str(e)}), 500
 
+
+@app.route("/search", methods=["GET"])
+def search():
+    # Validate request data
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No JSON data received"}), 400
+    
+    # Ensure 'product' key exists in JSON data
+    product = data.get("search")
+    if not product:
+        return jsonify({"error": "No 'search' field in request"}), 400
+    
+    try:
+        # Process the product data with search_product function
+        output = search_product(product)
+        
+        # Check if output is in a valid JSON format (dict or list)
+        if isinstance(output, (dict, list)):
+            if output:  # If the output is not empty
+                return jsonify(output), 200
+            else:
+                return jsonify({"message": "No results found for the given product"}), 404
+        else:
+            return jsonify({"error": "Invalid response format from search_product"}), 500
+    
+    except Exception as e:
+        # Handle any errors in processing
+        return jsonify({"error": "An error occurred during search processing", "details": str(e)}), 500
 
 
 

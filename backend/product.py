@@ -18,7 +18,7 @@ def product_rating(name, id):
         },
             
            {
-               "role": "user","content": f"give me the rating out of 10 for the product {name} with id {id} respond in one number and 2 line of reason only no need of anything extra just a number and 2 lines thats it in the json format"
+               "role": "user","content": f"give me the rating out of 10 for the product {name} with id {id} respond in one number and 2 line of reason and give the price of the product in rupee only no need of anything extra just a number and 2 lines thats it in the json format"
          }
            ],
         temperature=0.5,
