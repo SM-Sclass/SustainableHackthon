@@ -155,4 +155,4 @@ function getFirstTwoWords(sentence) {
   );
 }
 
-export default Page;
+export default page;

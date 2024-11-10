@@ -117,21 +117,23 @@ def product_history():
 
 
 # route for getting the rating and the reasons
-@app.route("/product" , methods=["GET"])
+@app.route("/product" , methods=["POST"])
 def product():
     # Validate request data
     data = request.get_json()
-    
+    print(data,"these is data")
     if not data:
         return jsonify({"error": "No JSON data received"}), 400
     
     # Ensure 'product' key exists in JSON data
-    product = data.get("product")
     prod_id = data.get("prod_id")
+    response = api.product.get(prod_id, fields=[prod_id, "product_name"])
+    product_name = response.get("product_name", "Product name not available")
+   
     if not product or not prod_id:
         return jsonify({"error": "incomplete fields in request"}), 400
     try:
-        output = product_rating(product,prod_id)
+        output = product_rating(product_name,prod_id)
             # Check if output is in a valid JSON format (dict or list)
         if isinstance(output, (dict, list)):
             if output:  # If the output is not empty
