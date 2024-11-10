@@ -1,43 +1,15 @@
 "use client";
-import React, { useState, useEffect } from 'react'
-import HistoryFoodRecommendation from '@/app/components/HistoryFoodRecommendation';
-import HistoryFood from '@/app/components/HistoryFood';
-import SkincareCard from '@/app/components/SkincareCard';
-import { auth } from '@/app/utils/firebase';
+import React, { useState } from "react";
+import HistoryFoodRecommendation from "@/app/components/HistoryFoodRecommendation";
+import SkincareCard from "@/app/components/SkincareCard";
 
-function page() {
-
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('food-beverage');
-  const [response, setResponse] = useState([]);
-  const [error, setError] = useState('');
+function Page() {
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("cosmetic");
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState("");
   const [fetching, setFetching] = useState(false);
-  const [user, setUser] = useState(null);
-1
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user); // If user is authenticated, store user data
-      } else {
-        setUser(null); // If no user, set user state to null
-      }
-    });
-
-    return () => unsubscribe(); // Cleanup the listener on component unmount
-  }, []);
-
-
-
-
-
-function getFirstTwoWords(sentence) {
-  if (typeof sentence !== 'string' || sentence.trim() === '') {
-    return '';  // Return an empty string or a default value if the sentence is invalid
-  }
-  const words = sentence.split(" ");
-  return words.slice(0, 2).join(' ');
-}
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!search || !category) {
@@ -126,31 +98,29 @@ function getFirstTwoWords(sentence) {
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       </div>
 
-      <div className="m-2 p-4">
-        <h3 className="text-lg font-bold text-neutral-500 p-2">Search Results</h3>
-        {response && category === "cosmetic" && (
-          <div className="flex flex-col items-center justify-center">
-            <p className="text-neutral-600 my-2 p-2">{response.product_name || "No product name"}</p>
-            <p className="text-sm my-1">{response.reason || "No reason provided"}</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {response.suggested_products?.map((product) => (
-                <SkincareCard key={product.link} {...product} />
-              ))}
-            </div>
-          </div>
-        )}
-        {
-          response && category === "food-beverage" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {response.map((food) => (
-                <HistoryFood key={food._id} {...food} />
-              ))}
-            </div>
-          )
-        }
-      </div>
+      <div className="m-4 p-5">
+  <h3 className="text-xl font-bold text-neutral-600 p-3">Search Results</h3>
+  {response && category === "cosmetic" && (
+    <div className="flex flex-col items-center justify-center">
+      <p className="text-neutral-700 text-lg my-3 p-2">{response.product_name || "No product name"}</p>
+      <p className="text-sm my-2 text-yellow-500">{response.reason || "No reason provided"}</p>
+      
+      {/* Rating formatted as rating/10 */}
+      <p className="text-lg my-2 font-semibold text-yellow-600">
+        Rating: {response.rating ? `${response.rating}/10` : "No rating provided"}
+      </p>
 
-      {user && <HistoryFoodRecommendation />}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-4">
+        {response.suggested_products?.map((product) => (
+          <SkincareCard key={product.link} {...product} />
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+
+
+      <HistoryFoodRecommendation />
     </>
   );
 }
