@@ -9,6 +9,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import json
 from bs4 import BeautifulSoup
+from product import product_rating
 
 # Initialize Flask App
 app = Flask(__name__)
@@ -160,6 +161,41 @@ def product_history():
     except Exception as e:
         print(f"Error processing request: {e}")
         return jsonify({"error": "Internal Server Error", "details": str(e)}), 500
+
+
+
+
+# route for getting the rating and the reasons
+@app.route("/product" , methods=["GET"])
+def product():
+    # Validate request data
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({"error": "No JSON data received"}), 400
+    
+    # Ensure 'product' key exists in JSON data
+    product = data.get("product")
+    prod_id = data.get("prod_id")
+    if not product or not prod_id:
+        return jsonify({"error": "incomplete fields in request"}), 400
+    try:
+        output = product_rating(product,prod_id)
+            # Check if output is in a valid JSON format (dict or list)
+        if isinstance(output, (dict, list)):
+            if output:  # If the output is not empty
+                return jsonify(output), 200
+            else:
+                return jsonify({"message": "No results found for the given product"}), 404
+        else:
+            return jsonify({"error": "Invalid response format from search_product"}), 500
+    
+    except Exception as e:
+        # Handle any errors in processing
+        return jsonify({"error": "An error occurred during search processing", "details": str(e)}), 500
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # Enable debugging to get detailed error logs
