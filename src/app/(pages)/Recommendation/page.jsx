@@ -10,6 +10,24 @@ function page() {
   const [response, setResponse] = useState([]);
   const [error, setError] = useState('');
   const [fetching, setFetching] = useState(false);
+  const[rating, setRating] = useState(0);
+
+  const getBorderColor = (ecoscore_grade) => {
+    if(ecoscore_grade <= 2) return 'text-red-500';  // No harm
+    else if (ecoscore_grade >= 2) return 'text-orange-500';  // Low harm
+    else if (ecoscore_grade >= 5) return 'text-yellow-500';  // Moderate harm
+    else if (ecoscore_grade >= 8) return 'text-green-500';  // Significant harm
+    return 'border-grey-500';  // High harm
+};
+
+
+function getFirstTwoWords(sentence) {
+  if (typeof sentence !== 'string' || sentence.trim() === '') {
+    return '';  // Return an empty string or a default value if the sentence is invalid
+  }
+  const words = sentence.split(" ");
+  return words.slice(0, 2).join(' ');
+}
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!search || !category) {
@@ -63,6 +81,8 @@ function page() {
           const data = await res.json();
           setResponse(data);
         }
+        const productrating= getBorderColor(data.rating)
+        setRating(productrating)
         setFetching(false);
       } 
     }
@@ -109,9 +129,15 @@ function page() {
         </div>
         <div className="m-2 p-4">
           <h3 className="text-lg font-bold text-neutral-500 p-2">Search Results</h3>
+          {category==='skincare' &&  (
+              <div className=" flex flex-col items-center justify-center">
+                <span className='text-neutral-600 my-2 p-2'>{getFirstTwoWords(response.product_name)}</span>
+                <span className={`${rating} text-xs my-1 p-21`}>{response.reason}</span>
+              </div>
+            )}
           <div className="p-2 grid grid-cols-1 w-full md:grid-cols-2 lg:grid-cols-4 md:gap-8 gap-5">
-          {(category==='skincare') && Objects.value(response).map((responseData) => (
-              <SkiincareCard key={responseData._id} {...responseData} />
+          {category==='skincare' && Object.values(response).map((responseData) => (
+              <SkiincareCard key={responseData.image_url} {...responseData} />
             ))}
             {(category==='food-bevarage' || category==='cooling-appliance')&& response.map((responseData) => (
               <HistoryFood key={responseData._id} {...responseData} />
