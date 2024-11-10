@@ -1,24 +1,36 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import HistoryFoodRecommendation from '@/app/components/HistoryFoodRecommendation';
 import HistoryFood from '@/app/components/HistoryFood';
-import SkiincareCard from '@/app/components/SkincareCard';
+import SkincareCard from '@/app/components/SkincareCard';
+import { auth } from '@/app/utils/firebase';
+
 function page() {
 
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('food-beverage');
   const [response, setResponse] = useState([]);
   const [error, setError] = useState('');
   const [fetching, setFetching] = useState(false);
   const[rating, setRating] = useState(0);
+  const [active, setActive] = useState(null);
+  const [user, setUser] = useState(null);
+1
 
-  const getBorderColor = (ecoscore_grade) => {
-    if(ecoscore_grade <= 2) return 'text-red-500';  // No harm
-    else if (ecoscore_grade >= 2) return 'text-orange-500';  // Low harm
-    else if (ecoscore_grade >= 5) return 'text-yellow-500';  // Moderate harm
-    else if (ecoscore_grade >= 8) return 'text-green-500';  // Significant harm
-    return 'border-grey-500';  // High harm
-};
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user); // If user is authenticated, store user data
+      } else {
+        setUser(null); // If no user, set user state to null
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup the listener on component unmount
+  }, []);
+
+
+
 
 
 function getFirstTwoWords(sentence) {
@@ -45,12 +57,14 @@ function getFirstTwoWords(sentence) {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ search }),  // adjust key based on backend expectation
+          body: JSON.stringify({"search": search }),  // adjust key based on backend expectation
         });
         if (res.ok) {
           const data = await res.json();
           setResponse(data);
+          console.log(data)
         }
+        console.log(response)
         setFetching(false);
       }
       else if (category === 'cooling-appliance') {
@@ -80,6 +94,7 @@ function getFirstTwoWords(sentence) {
         if (res.ok) {
           const data = await res.json();
           setResponse(data);
+
         }
         const productrating= getBorderColor(data.rating)
         setRating(productrating)
@@ -91,6 +106,19 @@ function getFirstTwoWords(sentence) {
         setFetching(false);
       }
     };
+
+    const renderCategoryComponent = () => {
+      if (category === 'food-beverage') {
+        return response.map((item) => <HistoryFood key={item._id} {...item} />);
+      } else if (category === 'cooling-appliance') {
+        return response.map((item) => <HistoryFood key={item._id} {...item} />);
+      } else if (category === 'cosmetic') {
+        return response.map((item)=> <SkincareCard {...item}/>);
+      } else {
+        return <p>No data available for this category</p>;
+      }
+    };
+
     return (
       <>
         <div className='h-32 bg-white'></div>
@@ -99,18 +127,18 @@ function getFirstTwoWords(sentence) {
             <select
               value={category}  // category state to track selected option
               onChange={(e) => setCategory(e.target.value)}  // update category on change
-              className="absolute right-12 top-1/2 transform -translate-y-1/2 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 bg-white md:absolute focus:outline-none focus:ring-2 focus:ring-green-300 lg:absolute xl:absolute"
+              className="absolute right-12 cursor-pointer top-1/2 transform -translate-y-1/2 border border-gray-300 rounded-lg px-3 py-2 text-gray-700 bg-white md:absolute focus:outline-none focus:ring-2 focus:ring-green-300 lg:absolute xl:absolute"
             >
-              <option value="food-beverage">Food & Beverage</option>
-              <option value="cooling-appliance">Cooling appliance</option>
-              <option value="cosmetic">Cosmetics</option>
+              <option value="food-beverage" className='cursor-pointer'>Food & Beverage</option>
+              <option value="cooling-appliance" className='cursor-pointer'>Cooling appliance</option>
+              <option value="cosmetic" className='cursor-pointer'>Cosmetics</option>
             </select>
             <input type="text" placeholder="Look for Sustainable"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-5 pr-12 py-3 text-gray-800 placeholder-gray-500 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-300" />
             <button
-              className={`absolute right-0 inset-y-0 pr-3 ${fetching ? 'bg-blue-500' : 'bg-transparent'}`}
+              className={`absolute right-0 inset-y-0 pr-3 ${fetching ? 'bg-lime-600' : 'bg-white'}`}
               type="submit"
               disabled={fetching}
             >
@@ -129,22 +157,10 @@ function getFirstTwoWords(sentence) {
         </div>
         <div className="m-2 p-4">
           <h3 className="text-lg font-bold text-neutral-500 p-2">Search Results</h3>
-          {category==='skincare' &&  (
-              <div className=" flex flex-col items-center justify-center">
-                <span className='text-neutral-600 my-2 p-2'>{getFirstTwoWords(response.product_name)}</span>
-                <span className={`${rating} text-xs my-1 p-21`}>{response.reason}</span>
-              </div>
-            )}
-          <div className="p-2 grid grid-cols-1 w-full md:grid-cols-2 lg:grid-cols-4 md:gap-8 gap-5">
-          {category==='skincare' && Object.values(response).map((responseData) => (
-              <SkiincareCard key={responseData.image_url} {...responseData} />
-            ))}
-            {(category==='food-bevarage' || category==='cooling-appliance')&& response.map((responseData) => (
-              <HistoryFood key={responseData._id} {...responseData} />
-            ))}
-          </div>
+          {renderCategoryComponent()}
         </div>
-        <HistoryFoodRecommendation />
+          {user && <HistoryFoodRecommendation />}
+        
       </>
 
 

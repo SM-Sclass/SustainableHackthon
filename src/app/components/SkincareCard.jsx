@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import Image from "next/image";
-function SkiincareCard(skincareData) {
+function SkincareCard(skincareData) {
     //dbpush id
     function getFirstTwoWords(sentence) {
         if (typeof sentence !== 'string' || sentence.trim() === '') {
@@ -11,7 +11,6 @@ function SkiincareCard(skincareData) {
         const words = sentence.split(' ');
         return words.slice(0, 2).join(' ');
       }
-    const {product_name, image_url} = SkincareData;
     const getBorderColor = () => {
         if(ecoscore_grade <= 20) return 'border-red-500';  // No harm
         else if (ecoscore_grade >= 20) return 'border-orange-500';  // Low harm
@@ -29,4 +28,4 @@ function SkiincareCard(skincareData) {
     )
 }
 
-export default SkiincareCard
+export default SkincareCard

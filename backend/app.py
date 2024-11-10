@@ -160,9 +160,7 @@ def search():
     
     try:
         # Process the product data with search_product function
-        print("Here1")
         output = search_product(product)
-        print("Here2")
         # Check if output is in a valid JSON format (dict or list)
         if isinstance(output, (dict, list)):
             if output:  # If the output is not empty
