@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import HistoryFoodRecommendation from "@/app/components/HistoryFoodRecommendation";
-import HistoryFood from "@/app/components/HistoryFood";
 import SkincareCard from "@/app/components/SkincareCard";
 
 function Page() {
@@ -104,7 +103,7 @@ function Page() {
         {response && category === "cosmetic" && (
           <div className="flex flex-col items-center justify-center">
             <p className="text-neutral-600 my-2 p-2">{response.product_name || "No product name"}</p>
-            <p className="text-sm my-1">{response.reason || "No reason provided"}</p>
+            <p className="text-sm my-1 text-yellow-500">{response.reason || "No reason provided"}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
               {response.suggested_products?.map((product) => (
                 <SkincareCard key={product.link} {...product} />
